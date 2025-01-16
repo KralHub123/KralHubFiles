@@ -1,0 +1,28 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("KralLiftingSim", "DarkTheme")
+    -- MAIN
+    local Main = Window:NewTab("Ana Menü")
+    local MainSection = Main:NewSection("Tuşlar")
+
+
+
+    MainSection:NewButton("Otomatik Araçlar", "W addrian_dacap", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/KralLiftingSim-menu"))()
+    end)
+
+
+    MainSection:NewButton("By KralHub", "W addrian_dacap", function()
+        loadstring(game:HttpGet(""))()
+    end)
+    -- HIZLAR
+    local Main1 = Window:NewTab("Hızlar")
+    local Main1Section = Main1:NewSection("Hızlar")
+
+
+
+    Main1Section:NewButton("Hız", "W addrian_dacap", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/KralLiftingSim-hiz"))()
+    end)
+    Main1Section:NewButton("By KralHub", "W addrian_dacap", function()
+        loadstring(game:HttpGet(""))()
+    end)
