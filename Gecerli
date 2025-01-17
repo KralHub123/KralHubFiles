@@ -1,0 +1,174 @@
+local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/discord"))()
+
+-- Discord GUI
+local win = DiscordLib:Window("KralHub")
+local serv = win:Server("KralHub", "http://www.roblox.com/asset/?id=6031075938")
+
+-- Uçma Komutları
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local rootPart = character:WaitForChild("HumanoidRootPart")
+local flying = false
+local speed = 0
+local maxSpeed = 50
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local bg, bv
+
+-- Uçma Başlatma Fonksiyonu
+local function startFlying()
+    bg = Instance.new("BodyGyro", rootPart)
+    bv = Instance.new("BodyVelocity", rootPart)
+
+    bg.P = 9e4
+    bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+
+    humanoid.PlatformStand = true
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if flying then
+            speed = math.clamp(speed + 1, 0, maxSpeed)
+            local direction = Vector3.new(ctrl.l + ctrl.r, 0, ctrl.f + ctrl.b)
+            bv.Velocity = workspace.CurrentCamera.CFrame:VectorToWorldSpace(direction) * speed
+            bg.CFrame = workspace.CurrentCamera.CFrame
+        else
+            speed = 0
+            bv:Destroy()
+            bg:Destroy()
+            humanoid.PlatformStand = false
+        end
+    end)
+end
+
+-- Uçmayı Aç/Kapa
+local function toggleFly(state)
+    flying = state
+    if flying then
+        startFlying()
+    else
+        speed = 0
+        bv:Destroy()
+        bg:Destroy()
+        humanoid.PlatformStand = false
+    end
+end
+
+-- Animasyon Kanalı ve Düğmesi
+serv:Channel("Animasyon"):Button("Animasyonları Yükle", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHub/refs/heads/main/Animations"))()
+end)
+
+-- Uçma Toggle Düğmesi (Discord)
+serv:Channel("Uçma"):Toggle("Uçma", false, function(state)
+    toggleFly(state)
+end)
+
+-- Teleport Aracı Oluşturma Fonksiyonu
+local function createTPTool()
+    local Tele = Instance.new("Tool", player.Backpack)
+    Tele.RequiresHandle = false
+    Tele.RobloxLocked = true
+    Tele.Name = "TPTool"
+    Tele.ToolTip = "Teleport Tool"
+    Tele.Equipped:Connect(function(Mouse)
+        Mouse.Button1Down:Connect(function()
+            if Mouse.Target then
+                player.Character.HumanoidRootPart.CFrame = CFrame.new(Mouse.Hit.x, Mouse.Hit.y + 5, Mouse.Hit.z)
+            end
+        end)
+    end)
+end
+
+-- Teleport Aracı Düğmesi (Discord)
+serv:Channel("Işınlanma"):Button("Işınlanma Aleti", function()
+    createTPTool()
+end)
+
+-- Klavye Kontrolleri
+local userInput = game:GetService("UserInputService")
+userInput.InputBegan:Connect(function(input)
+    if flying then
+        if input.KeyCode == Enum.KeyCode.W then
+            ctrl.f = -1
+        elseif input.KeyCode == Enum.KeyCode.S then
+            ctrl.b = 1
+        elseif input.KeyCode == Enum.KeyCode.A then
+            ctrl.l = -1
+        elseif input.KeyCode == Enum.KeyCode.D then
+            ctrl.r = 1
+        end
+    end
+end)
+
+userInput.InputEnded:Connect(function(input)
+    if flying then
+        if input.KeyCode == Enum.KeyCode.W then
+            ctrl.f = 0
+        elseif input.KeyCode == Enum.KeyCode.S then
+            ctrl.b = 0
+        elseif input.KeyCode == Enum.KeyCode.A then
+            ctrl.l = 0
+        elseif input.KeyCode == Enum.KeyCode.D then
+            ctrl.r = 0
+        end
+    end
+end)
+
+-- Noclip
+_G.noclip = not _G.noclip
+print(_G.noclip)
+
+if not game:GetService('Players').LocalPlayer.Character:FindFirstChild("LowerTorso") then
+    while _G.noclip do
+        game:GetService("RunService").Stepped:wait()
+        game.Players.LocalPlayer.Character.Head.CanCollide = false
+        game.Players.LocalPlayer.Character.Torso.CanCollide = false
+    end
+else
+    if _G.InitNC ~= true then     
+        _G.NCFunc = function(part)      
+            local pos = game:GetService('Players').LocalPlayer.Character.LowerTorso.Position.Y  
+            if _G.noclip then             
+                if part.Position.Y > pos then                 
+                    part.CanCollide = false             
+                end        
+            end    
+        end      
+        _G.InitNC = true 
+    end 
+     
+    game:GetService('Players').LocalPlayer.Character.Humanoid.Touched:connect(_G.NCFunc) 
+end
+
+-- Noclip Toggle Düğmesi (Discord)
+serv:Channel("Duvar İçinden Geçme"):Toggle("Duvar İçinden Geçme", false, function(state)
+    _G.noclip = state
+    print("Noclip: " .. tostring(_G.noclip))
+end)
+
+
+-- Infinite Jump
+_G.infinjump = not _G.infinjump
+
+local plr = game:GetService'Players'.LocalPlayer
+local m = plr:GetMouse()
+m.KeyDown:connect(function(k)
+    if _G.infinjump then
+        if k:byte() == 32 then
+            plrh = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass'Humanoid'
+            plrh:ChangeState('Jumping')
+            wait()
+            plrh:ChangeState('Seated')
+        end
+    end
+end)
+
+-- Infinite Jump Toggle Düğmesi (Discord)
+serv:Channel("Havada Zıplama"):Toggle("Havada Zıplama", false, function(state)
+    _G.infinjump = state
+    print("Infinite Jump: " .. tostring(_G.infinjump))
+end)
+
+-- DiscordLib için Arka Plan
+
