@@ -1,5 +1,5 @@
 
-local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AlifAnanta/LiftingSimulator/main/LUA"))()
+local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/LiftingSimUi"))()
 
 local MainUI = UILibrary.Load("KralHub")
 local FirstPage = MainUI.AddPage("Ana Menü")
