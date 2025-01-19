@@ -208,45 +208,40 @@ end)
 -- Hız Sayfası
 local SpeedPage = MainUI.AddPage("Hız")
 SpeedPage.AddButton("Hız Ayarını Aç", function()
-   local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local SliderFrame = Instance.new("Frame")
-local SliderButton = Instance.new("Frame")
-local SpeedLabel = Instance.new("TextLabel")
+    local ScreenGui = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local SliderFrame = Instance.new("Frame")
+    local SliderButton = Instance.new("Frame")
+    local SpeedLabel = Instance.new("TextLabel")
 
+    ScreenGui.Parent = game:GetService("CoreGui")
 
-ScreenGui.Parent = game:GetService("CoreGui") -- PlayerGui yerine CoreGui kullanılır
+    Frame.Parent = ScreenGui
+    Frame.Size = UDim2.new(0, 200, 0, 100)
+    Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+    Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Frame.BorderSizePixel = 0
+    Frame.Active = true
+    Frame.Draggable = true
 
-Frame.Parent = ScreenGui
-Frame.Size = UDim2.new(0, 200, 0, 100) -- Daha küçük bir boyut
-Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
-Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Siyah tema
-Frame.BorderSizePixel = 0
-Frame.Active = true -- Çerçeveyi sürüklemek için gerekli
-Frame.Draggable = true -- Çerçeveyi sürüklemeyi etkinleştirir
+    SpeedLabel.Parent = Frame
+    SpeedLabel.Size = UDim2.new(1, 0, 0, 30)
+    SpeedLabel.Position = UDim2.new(0, 0, 0, 10)
+    SpeedLabel.Text = "Hız: 2000"
+    SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SpeedLabel.BackgroundTransparency = 1
+    SpeedLabel.TextSize = 18
 
+    SliderFrame.Parent = Frame
+    SliderFrame.Size = UDim2.new(1, -20, 0, 10)
+    SliderFrame.Position = UDim2.new(0, 10, 0, 50)
+    SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    SliderFrame.BorderSizePixel = 0
 
-SpeedLabel.Parent = Frame
-SpeedLabel.Size = UDim2.new(1, 0, 0, 30)
-SpeedLabel.Position = UDim2.new(0, 0, 0, 10)
-SpeedLabel.Text = "Hız: 2000"
-SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-SpeedLabel.BackgroundTransparency = 1
-SpeedLabel.TextSize = 18
-
-
-SliderFrame.Parent = Frame
-SliderFrame.Size = UDim2.new(1, -20, 0, 10)
-SliderFrame.Position = UDim2.new(0, 10, 0, 50)
-SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Siyah temaya uygun gri çerçeve
-SliderFrame.BorderSizePixel = 0
-
-
-SliderButton.Parent = SliderFrame
-SliderButton.Size = UDim2.new(0, 20, 1, 0)
-SliderButton.Position = UDim2.new(0, 0, 0, 0)
-SliderButton.BackgroundColor3 = Color3.fromRGB(0, 200, 0) -- Kaydırıcı için yeşil renk
-
+    SliderButton.Parent = SliderFrame
+    SliderButton.Size = UDim2.new(0, 20, 1, 0)
+    SliderButton.Position = UDim2.new(0, 0, 0, 0)
+    SliderButton.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
 
 local sliderMin = 0
 local sliderMax = 5000
@@ -320,6 +315,7 @@ while true do
     wait(1)
     local tbl_main = {"LiftWeight"}
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(tbl_main))
+end
 end)
 
 
