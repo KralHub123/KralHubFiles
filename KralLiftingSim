@@ -1,28 +1,254 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("KralLiftingSim", "DarkTheme")
-    -- MAIN
-    local Main = Window:NewTab("Ana Menü")
-    local MainSection = Main:NewSection("Tuşlar")
+local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/LiftingSimUi"))()
 
+local MainUI = UILibrary.Load("KralHub")
+local FirstPage = MainUI.AddPage("Otomatik 1")
+local SecondPage = MainUI.AddPage("Otomatik 2")
 
+-- Otomatik Kas Yapma
+FirstPage.AddToggle("Otomatik Kas Yapma", false, function(Value)
+    toggle = Value
+    while toggle do
+        wait()
+        local ohTable1 = {
+            [1] = "GainMuscle"
+        }
+        game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohTable1)
+    end
+end)
 
-    MainSection:NewButton("Otomatik Araçlar", "W addrian_dacap", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/KralLiftingSim-menu"))()
+-- Otomatik Satma
+FirstPage.AddToggle("Otomatik Satma", false, function(Value)
+    tog = Value
+    while tog do
+        wait()
+        local ohTable1 = {
+            [1] = "SellMuscle"
+        }
+        game:GetService("ReplicatedStorage").RemoteEvent:FireServer(ohTable1)
+    end
+end)
+
+-- Satın Alma Menüsü (Otomatik 1)
+FirstPage.AddButton("Satın Alma Menüsü", function()
+    game:GetService("Players").LocalPlayer.PlayerGui["Main_Gui"]["UpgradeMenu_Frame"].Visible = true
+end)
+
+-- Otomatik Ağırlık Satın Alma
+SecondPage.AddToggle("Otomatik Ağırlık Satın Alma", false, function(Value)
+    local function parseCurrency(text)
+        local number = text:match("^(.-)[KkMmBbTt]?$")
+        local suffix = text:match("[KkMmBbTt]$")
+        number = tonumber(number)
+        if suffix then
+            if suffix == 'K' or suffix == 'k' then
+                number = number * 1000
+            elseif suffix == 'M' or suffix == 'm' then
+                number = number * 1000000
+            elseif suffix == 'B' or suffix == 'b' then
+                number = number * 1000000000
+            elseif suffix == 'T' or suffix == 't' then
+                number = number * 1000000000000
+            end
+        end
+        return number
+    end
+
+    getgenv().buyfarm = Value
+    task.spawn(function()
+        while true do
+            task.wait()
+            if not getgenv().buyfarm then
+                break
+            end
+            for i, v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.UpgradeInfo_Frame.PageList.Page01:GetChildren()) do
+                if v:IsA("ImageButton") and v:FindFirstChild("LockImage").Visible == false and v:FindFirstChild("tlPrice") and v:FindFirstChild("tlPrice").Text ~= "Owned" and v:FindFirstChild("tlPrice").Text ~= "Equipped" and v:FindFirstChild("tlPrice").Text ~= "" and v:FindFirstChild("tlPrice").Text ~= " " and v:FindFirstChild("tlPrice").Text ~= nil and parseCurrency(v:FindFirstChild("tlPrice").Text) ~= nil and not string.find(v:FindFirstChild("tlPrice").Text, "R") then
+                    local tlPriceText = v:WaitForChild("tlPrice").Text
+                    local cashStatusText = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.DataMenu_Frame.Cash:WaitForChild("Status").Text
+                    local tlPriceNumber = parseCurrency(tlPriceText)
+                    local cashStatusNumber = parseCurrency(cashStatusText)
+                    if tlPriceNumber <= cashStatusNumber then
+                        for try = 1, 142 do
+                            if v:FindFirstChild("tlPrice").Text == "Equipped" or v:FindFirstChild("tlPrice") == "Owned" then
+                                break
+                            end
+                            local args = {
+                                [1] = {
+                                    [1] = "BuyItem",
+                                    [2] = "Income_Item",
+                                    [3] = v.Name,
+                                    [4] = try
+                                }
+                            }
+                            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end
     end)
+end)
 
+-- Otomatik Genetik Satın Alma
+SecondPage.AddToggle("Otomatik Genetik Satın Alma", false, function(Value)
+local function parseCurrency(text)
+        local number = text:match("^(.-)[KkMmBbTt]?$")
+        local suffix = text:match("[KkMmBbTt]$")
+        number = tonumber(number)
+        if suffix then
+            if suffix == 'K' or suffix == 'k' then
+                number = number * 1000
+            elseif suffix == 'M' or suffix == 'm' then
+                number = number * 1000000
+            elseif suffix == 'B' or suffix == 'b' then
+                number = number * 1000000000
+            elseif suffix == 'T' or suffix == 't' then
+                number = number * 1000000000000
+            end
+        end
+        return number
+    end
 
-    MainSection:NewButton("By KralHub", "W addrian_dacap", function()
-        loadstring(game:HttpGet(""))()
+    getgenv().buyfarma = Value
+    task.spawn(function()
+        while true do
+            task.wait()
+            if not getgenv().buyfarma then
+                break
+            end
+            for i, v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.UpgradeInfo_Frame.PageList.Page02:GetChildren()) do
+                if v:IsA("ImageButton") and v:FindFirstChild("LockImage").Visible == false and v:FindFirstChild("tlPrice") and v:FindFirstChild("tlPrice").Text ~= "Owned" and v:FindFirstChild("tlPrice").Text ~= "Equipped" and v:FindFirstChild("tlPrice").Text ~= "" and v:FindFirstChild("tlPrice").Text ~= " " and v:FindFirstChild("tlPrice").Text ~= nil and parseCurrency(v:FindFirstChild("tlPrice").Text) ~= nil and not string.find(v:FindFirstChild("tlPrice").Text, "R") then
+                    local tlPriceText = v:WaitForChild("tlPrice").Text
+                    local cashStatusText = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.DataMenu_Frame.Cash:WaitForChild("Status").Text
+                    local tlPriceNumber = parseCurrency(tlPriceText)
+                    local cashStatusNumber = parseCurrency(cashStatusText)
+                    if tlPriceNumber <= cashStatusNumber then
+                        for try = 1, 78 do
+                            if v:FindFirstChild("tlPrice").Text == "Equipped" or v:FindFirstChild("tlPrice") == "Owned" then
+                                break
+                            end
+                            local args = {
+                                [1] = {
+                                    [1] = "BuyItem",
+                                    [2] = "Bag_Item",
+                                    [3] = v.Name,
+                                    [4] = try
+                                }
+                            }
+                            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end
     end)
-    -- HIZLAR
-    local Main1 = Window:NewTab("Hızlar")
-    local Main1Section = Main1:NewSection("Hızlar")
+end)
 
+-- Otomatik Vücut Değişimi Satın Alma
+SecondPage.AddToggle("Otomatik Vücut Değişimi Satın Alma", false, function(Value)
+        local function parseCurrency(text)
+        local number = text:match("^(.-)[KkMmBbTt]?$")
+        local suffix = text:match("[KkMmBbTt]$")
+        number = tonumber(number)
+        if suffix then
+            if suffix == 'K' or suffix == 'k' then
+                number = number * 1000
+            elseif suffix == 'M' or suffix == 'm' then
+                number = number * 1000000
+            elseif suffix == 'B' or suffix == 'b' then
+                number = number * 1000000000
+            elseif suffix == 'T' or suffix == 't' then
+                number = number * 1000000000000
+            end
+        end
+        return number
+    end
 
-
-    Main1Section:NewButton("Hız", "W addrian_dacap", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/KralHub123/KralHubFiles/refs/heads/main/KralLiftingSim-hiz"))()
+    getgenv().buyfarmb = Value
+    task.spawn(function()
+        while true do
+            task.wait()
+            if not getgenv().buyfarmb then
+                break
+            end
+            for i, v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.UpgradeInfo_Frame.PageList.Page03:GetChildren()) do
+                if v:IsA("ImageButton") and v:FindFirstChild("LockImage").Visible == false and v:FindFirstChild("tlPrice") and v:FindFirstChild("tlPrice").Text ~= "Owned" and v:FindFirstChild("tlPrice").Text ~= "Equipped" and v:FindFirstChild("tlPrice").Text ~= "" and v:FindFirstChild("tlPrice").Text ~= " " and v:FindFirstChild("tlPrice").Text ~= nil and parseCurrency(v:FindFirstChild("tlPrice").Text) ~= nil and not string.find(v:FindFirstChild("tlPrice").Text, "R") then
+                    local tlPriceText = v:WaitForChild("tlPrice").Text
+                    local cashStatusText = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui").Main_Gui.DataMenu_Frame.Cash:WaitForChild("Status").Text
+                    local tlPriceNumber = parseCurrency(tlPriceText)
+                    local cashStatusNumber = parseCurrency(cashStatusText)
+                    if tlPriceNumber <= cashStatusNumber then
+                        for try = 1, 80 do
+                            if v:FindFirstChild("tlPrice").Text == "Equipped" or v:FindFirstChild("tlPrice") == "Owned" then
+                                break
+                            end
+                            local args = {
+                                [1] = {
+                                    [1] = "BuyItem",
+                                    [2] = "Rebirth_Item",
+                                    [3] = v.Name,
+                                    [4] = try
+                                }
+                            }
+                            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end
     end)
-    Main1Section:NewButton("By KralHub", "W addrian_dacap", function()
-        loadstring(game:HttpGet(""))()
-    end)
+end)
+
+-- Satın Alma Menüsü (Otomatik 2)
+SecondPage.AddButton("Satın Alma Menüsü", function()
+    game:GetService("Players").LocalPlayer.PlayerGui["Main_Gui"]["UpgradeMenu_Frame"].Visible = true
+end)
+
+
+
+-- Hız Sayfası
+local SpeedPage = MainUI.AddPage("Hız")
+SpeedPage.AddButton("Hız Ayarını Aç", function()
+    local ScreenGui = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local SliderFrame = Instance.new("Frame")
+    local SliderButton = Instance.new("Frame")
+    local SpeedLabel = Instance.new("TextLabel")
+
+    ScreenGui.Parent = game:GetService("CoreGui")
+
+    Frame.Parent = ScreenGui
+    Frame.Size = UDim2.new(0, 200, 0, 100)
+    Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+    Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Frame.BorderSizePixel = 0
+    Frame.Active = true
+    Frame.Draggable = true
+
+    SpeedLabel.Parent = Frame
+    SpeedLabel.Size = UDim2.new(1, 0, 0, 30)
+    SpeedLabel.Position = UDim2.new(0, 0, 0, 10)
+    SpeedLabel.Text = "Hız: 2000"
+    SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SpeedLabel.BackgroundTransparency = 1
+    SpeedLabel.TextSize = 18
+
+    SliderFrame.Parent = Frame
+    SliderFrame.Size = UDim2.new(1, -20, 0, 10)
+    SliderFrame.Position = UDim2.new(0, 10, 0, 50)
+    SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    SliderFrame.BorderSizePixel = 0
+
+    SliderButton.Parent = SliderFrame
+    SliderButton.Size = UDim2.new(0, 20, 1, 0)
+    SliderButton.Position = UDim2.new(0, 0, 0, 0)
+    SliderButton.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+
+    -- Hız kodunun devamı
+    -- Yukarıda sağlanan hız kontrol kodunu buraya ekleyin
+end)
+
+
+-- Yapımcılar Sayfası
+local DevelopersPage = MainUI.AddPage("Yapımcılar")
+DevelopersPage.AddButton("KralHub", function()
+end)
